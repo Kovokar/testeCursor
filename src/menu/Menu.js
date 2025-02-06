@@ -325,33 +325,68 @@ var Menu = /** @class */ (function () {
         });
     };
     Menu.prototype.listarPublicacoes = function () {
+        var _this = this;
         var perfis = this.redeSocial.listarPerfis();
-        console.log('\nPublicações:');
+        console.log('\n=== Feed de Notícias ===');
+        var temPublicacoes = false;
         perfis.forEach(function (perfil) {
             var publicacoes = perfil.listarPostagens();
             publicacoes.forEach(function (pub) {
-                console.log("\n".concat(perfil.apelido, " publicou: ").concat(pub.conteudo));
-                console.log("Data: ".concat(pub.dataHora.toLocaleString()));
+                temPublicacoes = true;
+                console.log("\n\uD83D\uDC64 ".concat(perfil.apelido, " diz:"));
+                console.log("\uD83D\uDCAD ".concat(pub.conteudo));
+                console.log("\uD83D\uDD52 ".concat(_this.formatarData(pub.dataHora)));
                 if (pub instanceof PublicacaoAvancada_1.PublicacaoAvancada) {
                     var interacoes = pub.listarInteracoes();
                     if (interacoes.length > 0) {
-                        console.log('Interações:', interacoes.length);
+                        console.log("\u2764\uFE0F ".concat(interacoes.length, " curtidas"));
                     }
                 }
-                console.log('-------------------');
+                console.log('───────────────────');
             });
         });
+        if (!temPublicacoes) {
+            console.log('\nNenhuma publicação ainda... Que tal ser o primeiro a publicar? 😊');
+        }
     };
     Menu.prototype.listarSolicitacoes = function () {
         var solicitacoes = this.redeSocial.listarSolicitacoesPendentes(this.perfilLogado.id);
         if (solicitacoes.length === 0) {
-            console.log('\nNenhuma solicitação de amizade pendente.');
+            console.log('\n📭 Sua caixa de solicitações está vazia');
             return;
         }
-        console.log('\nSolicitações de amizade pendentes:');
+        console.log('\n=== Solicitações de Amizade ===');
         solicitacoes.forEach(function (solicitante) {
-            console.log("".concat(solicitante.apelido, " te enviou uma solicita\u00E7\u00E3o de amizade"));
+            console.log("\uD83D\uDC4B ".concat(solicitante.apelido, " quer ser seu amigo!"));
         });
+    };
+    Menu.prototype.menuPrincipal = function () {
+        return __awaiter(this, void 0, void 0, function () {
+            return __generator(this, function (_a) {
+                console.log("\n\uD83D\uDC4B Ol\u00E1, ".concat(this.perfilLogado.apelido, "!"));
+                console.log('O que você quer fazer?');
+                return [2 /*return*/];
+            });
+        });
+    };
+    // Função auxiliar para formatar data
+    Menu.prototype.formatarData = function (data) {
+        var agora = new Date();
+        var diff = agora.getTime() - data.getTime();
+        var minutos = Math.floor(diff / 60000);
+        var horas = Math.floor(minutos / 60);
+        var dias = Math.floor(horas / 24);
+        if (minutos < 1)
+            return 'Agora mesmo';
+        if (minutos < 60)
+            return "H\u00E1 ".concat(minutos, " minutos");
+        if (horas < 24)
+            return "H\u00E1 ".concat(horas, " horas");
+        if (dias === 1)
+            return 'Ontem';
+        if (dias < 7)
+            return "H\u00E1 ".concat(dias, " dias");
+        return data.toLocaleDateString('pt-BR');
     };
     return Menu;
 }());

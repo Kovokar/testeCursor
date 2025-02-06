@@ -205,37 +205,67 @@ export class Menu {
 
     private listarPublicacoes(): void {
         const perfis = this.redeSocial.listarPerfis();
-        console.log('\nPublicações:');
+        console.log('\n=== Feed de Notícias ===');
         
+        let temPublicacoes = false;
         perfis.forEach(perfil => {
             const publicacoes = perfil.listarPostagens();
             publicacoes.forEach(pub => {
-                console.log(`\n${perfil.apelido} publicou: ${pub.conteudo}`);
-                console.log(`Data: ${pub.dataHora.toLocaleString()}`);
+                temPublicacoes = true;
+                console.log(`\n👤 ${perfil.apelido} diz:`);
+                console.log(`💭 ${pub.conteudo}`);
+                console.log(`🕒 ${this.formatarData(pub.dataHora)}`);
                 
                 if (pub instanceof PublicacaoAvancada) {
                     const interacoes = pub.listarInteracoes();
                     if (interacoes.length > 0) {
-                        console.log('Interações:', interacoes.length);
+                        console.log(`❤️ ${interacoes.length} curtidas`);
                     }
                 }
-                console.log('-------------------');
+                console.log('───────────────────');
             });
         });
+
+        if (!temPublicacoes) {
+            console.log('\nNenhuma publicação ainda... Que tal ser o primeiro a publicar? 😊');
+        }
     }
 
     private listarSolicitacoes(): void {
         const solicitacoes = this.redeSocial.listarSolicitacoesPendentes(this.perfilLogado.id);
         
         if (solicitacoes.length === 0) {
-            console.log('\nNenhuma solicitação de amizade pendente.');
+            console.log('\n📭 Sua caixa de solicitações está vazia');
             return;
         }
 
-        console.log('\nSolicitações de amizade pendentes:');
+        console.log('\n=== Solicitações de Amizade ===');
         solicitacoes.forEach(solicitante => {
-            console.log(`${solicitante.apelido} te enviou uma solicitação de amizade`);
+            console.log(`👋 ${solicitante.apelido} quer ser seu amigo!`);
         });
+    }
+
+    private async menuPrincipal(): Promise<void> {
+        console.log(`\n👋 Olá, ${this.perfilLogado.apelido}!`);
+        console.log('O que você quer fazer?');
+        // ... resto do menu
+    }
+
+    // Função auxiliar para formatar data
+    private formatarData(data: Date): string {
+        const agora = new Date();
+        const diff = agora.getTime() - data.getTime();
+        const minutos = Math.floor(diff / 60000);
+        const horas = Math.floor(minutos / 60);
+        const dias = Math.floor(horas / 24);
+
+        if (minutos < 1) return 'Agora mesmo';
+        if (minutos < 60) return `Há ${minutos} minutos`;
+        if (horas < 24) return `Há ${horas} horas`;
+        if (dias === 1) return 'Ontem';
+        if (dias < 7) return `Há ${dias} dias`;
+        
+        return data.toLocaleDateString('pt-BR');
     }
 
     // Implementar outros métodos do menu...
