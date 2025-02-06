@@ -13,6 +13,7 @@ exports.Perfil = void 0;
 var CustomErrors_1 = require("../errors/CustomErrors");
 var Perfil = /** @class */ (function () {
     function Perfil(id, apelido, foto, email, senha) {
+        this._redeSocial = null;
         this._id = id;
         this._apelido = apelido;
         this._foto = foto;
@@ -30,6 +31,7 @@ var Perfil = /** @class */ (function () {
             throw new CustomErrors_1.AmizadeJaExistenteError();
         }
         this._amigos.push(amigo);
+        this.notificarMudanca();
     };
     Perfil.prototype.removerAmigo = function (amigo) {
         var index = this._amigos.indexOf(amigo);
@@ -42,6 +44,7 @@ var Perfil = /** @class */ (function () {
             throw new CustomErrors_1.PerfilInativoError();
         }
         this._postagens.push(publicacao);
+        this.notificarMudanca();
     };
     Perfil.prototype.listarAmigos = function () {
         return __spreadArray([], this._amigos, true);
@@ -51,6 +54,14 @@ var Perfil = /** @class */ (function () {
     };
     Perfil.prototype.alterarStatus = function () {
         this._status = !this._status;
+    };
+    Perfil.prototype.setRedeSocial = function (redeSocial) {
+        this._redeSocial = redeSocial;
+    };
+    Perfil.prototype.notificarMudanca = function () {
+        if (this._redeSocial) {
+            this._redeSocial.salvarDados();
+        }
     };
     Object.defineProperty(Perfil.prototype, "id", {
         // Getters
@@ -70,6 +81,11 @@ var Perfil = /** @class */ (function () {
     });
     Object.defineProperty(Perfil.prototype, "status", {
         get: function () { return this._status; },
+        enumerable: false,
+        configurable: true
+    });
+    Object.defineProperty(Perfil.prototype, "foto", {
+        get: function () { return this._foto; },
         enumerable: false,
         configurable: true
     });

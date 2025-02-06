@@ -73,6 +73,7 @@ export class MenuLogin {
 
         try {
             const perfil = new Perfil(id, apelido, foto, email, senha);
+            perfil.setRedeSocial(this.redeSocial);
             this.redeSocial.adicionarPerfil(perfil);
             console.log('Conta criada com sucesso!');
         } catch (error: any) {

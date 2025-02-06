@@ -1,5 +1,6 @@
 import { Publicacao } from './Publicacao';
 import { AmizadeJaExistenteError, PerfilInativoError } from '../errors/CustomErrors';
+import { RedeSocial } from './RedeSocial';
 
 export class Perfil {
     private _id: string;
@@ -10,6 +11,7 @@ export class Perfil {
     private _status: boolean;
     private _amigos: Perfil[];
     private _postagens: Publicacao[];
+    private _redeSocial: RedeSocial | null = null;
 
     constructor(id: string, apelido: string, foto: string, email: string, senha: string) {
         this._id = id;
@@ -31,6 +33,7 @@ export class Perfil {
             throw new AmizadeJaExistenteError();
         }
         this._amigos.push(amigo);
+        this.notificarMudanca();
     }
 
     public removerAmigo(amigo: Perfil): void {
@@ -45,6 +48,7 @@ export class Perfil {
             throw new PerfilInativoError();
         }
         this._postagens.push(publicacao);
+        this.notificarMudanca();
     }
 
     public listarAmigos(): Perfil[] {
@@ -59,9 +63,20 @@ export class Perfil {
         this._status = !this._status;
     }
 
+    public setRedeSocial(redeSocial: RedeSocial): void {
+        this._redeSocial = redeSocial;
+    }
+
+    private notificarMudanca(): void {
+        if (this._redeSocial) {
+            this._redeSocial.salvarDados();
+        }
+    }
+
     // Getters
     get id(): string { return this._id; }
     get apelido(): string { return this._apelido; }
     get email(): string { return this._email; }
     get status(): boolean { return this._status; }
+    get foto(): string { return this._foto; }
 } 

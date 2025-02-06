@@ -153,6 +153,7 @@ var MenuLogin = /** @class */ (function () {
                         foto = _a.sent();
                         try {
                             perfil = new Perfil_1.Perfil(id, apelido, foto, email, senha);
+                            perfil.setRedeSocial(this.redeSocial);
                             this.redeSocial.adicionarPerfil(perfil);
                             console.log('Conta criada com sucesso!');
                         }
