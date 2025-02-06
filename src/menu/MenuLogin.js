@@ -105,18 +105,20 @@ var MenuLogin = /** @class */ (function () {
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
-                        email = this.pergunta('Email: ');
-                        senha = this.pergunta('Senha: ');
+                        console.log('\n=== Entrar na Rede Social ===');
+                        email = this.pergunta('�� Email: ');
+                        senha = this.pergunta('🔑 Senha: ');
                         perfil = this.redeSocial.listarPerfis().find(function (p) { return p.autenticar(email, senha); });
                         if (!perfil) return [3 /*break*/, 2];
-                        console.log("\nBem-vindo(a) de volta, ".concat(perfil.apelido, "!"));
+                        console.log("\n\uD83C\uDF89 Bem-vindo(a) de volta, ".concat(perfil.apelido, "!"));
                         menu = new Menu_1.Menu(this.redeSocial, perfil);
                         return [4 /*yield*/, menu.iniciar()];
                     case 1:
                         _a.sent();
                         return [3 /*break*/, 3];
                     case 2:
-                        console.log('Email ou senha incorretos!');
+                        console.log('❌ Email ou senha incorretos');
+                        console.log('💡 Dica: Se não tem conta, escolha a opção "Criar Conta"');
                         _a.label = 3;
                     case 3: return [2 /*return*/];
                 }
@@ -127,19 +129,22 @@ var MenuLogin = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var id, apelido, email, senha, foto, perfil;
             return __generator(this, function (_a) {
+                console.log('\n=== Criar Nova Conta ===');
+                console.log('Vamos começar! Precisamos de algumas informações:');
                 id = Date.now().toString();
-                apelido = this.pergunta('Nome de usuário: ');
-                email = this.pergunta('Email: ');
-                senha = this.pergunta('Senha: ');
-                foto = this.pergunta('Foto (emoji): ');
+                apelido = this.pergunta('👤 Como quer ser chamado? ');
+                email = this.pergunta('📧 Qual seu melhor email? ');
+                senha = this.pergunta('🔑 Escolha uma senha: ');
+                foto = this.pergunta('😊 Escolha um emoji para seu perfil: ');
                 try {
                     perfil = new Perfil_1.Perfil(id, apelido, foto, email, senha);
                     perfil.setRedeSocial(this.redeSocial);
                     this.redeSocial.adicionarPerfil(perfil);
-                    console.log('Conta criada com sucesso!');
+                    console.log('\n✨ Conta criada com sucesso!');
+                    console.log('🎉 Bem-vindo(a) à nossa rede social!');
                 }
                 catch (error) {
-                    console.error('Erro ao criar conta:', error.message);
+                    console.error('❌ Ops! Algo deu errado:', error.message);
                 }
                 return [2 /*return*/];
             });
