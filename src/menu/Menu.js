@@ -180,7 +180,8 @@ var Menu = /** @class */ (function () {
                         console.log('1. Enviar solicitação');
                         console.log('2. Aceitar solicitação');
                         console.log('3. Recusar solicitação');
-                        console.log('4. Voltar');
+                        console.log('4. Listar solicitações');
+                        console.log('5. Voltar');
                         opcao = this.pergunta('Escolha uma opção: ');
                         _a = opcao;
                         switch (_a) {
@@ -188,25 +189,29 @@ var Menu = /** @class */ (function () {
                             case '2': return [3 /*break*/, 3];
                             case '3': return [3 /*break*/, 5];
                             case '4': return [3 /*break*/, 7];
+                            case '5': return [3 /*break*/, 8];
                         }
-                        return [3 /*break*/, 8];
+                        return [3 /*break*/, 9];
                     case 1: return [4 /*yield*/, this.enviarSolicitacao()];
                     case 2:
                         _b.sent();
-                        return [3 /*break*/, 9];
+                        return [3 /*break*/, 10];
                     case 3: return [4 /*yield*/, this.aceitarSolicitacao()];
                     case 4:
                         _b.sent();
-                        return [3 /*break*/, 9];
+                        return [3 /*break*/, 10];
                     case 5: return [4 /*yield*/, this.recusarSolicitacao()];
                     case 6:
                         _b.sent();
-                        return [3 /*break*/, 9];
-                    case 7: return [2 /*return*/];
-                    case 8:
+                        return [3 /*break*/, 10];
+                    case 7:
+                        this.listarSolicitacoes();
+                        return [3 /*break*/, 10];
+                    case 8: return [2 /*return*/];
+                    case 9:
                         console.log('Opção inválida!');
-                        _b.label = 9;
-                    case 9: return [2 /*return*/];
+                        _b.label = 10;
+                    case 10: return [2 /*return*/];
                 }
             });
         });
@@ -325,11 +330,27 @@ var Menu = /** @class */ (function () {
         perfis.forEach(function (perfil) {
             var publicacoes = perfil.listarPostagens();
             publicacoes.forEach(function (pub) {
-                console.log("\nID: ".concat(pub.id));
-                console.log("Autor: ".concat(pub.perfil.apelido));
-                console.log("Conte\u00FAdo: ".concat(pub.conteudo));
+                console.log("\n".concat(perfil.apelido, " publicou: ").concat(pub.conteudo));
                 console.log("Data: ".concat(pub.dataHora.toLocaleString()));
+                if (pub instanceof PublicacaoAvancada_1.PublicacaoAvancada) {
+                    var interacoes = pub.listarInteracoes();
+                    if (interacoes.length > 0) {
+                        console.log('Interações:', interacoes.length);
+                    }
+                }
+                console.log('-------------------');
             });
+        });
+    };
+    Menu.prototype.listarSolicitacoes = function () {
+        var solicitacoes = this.redeSocial.listarSolicitacoesPendentes(this.perfilLogado.id);
+        if (solicitacoes.length === 0) {
+            console.log('\nNenhuma solicitação de amizade pendente.');
+            return;
+        }
+        console.log('\nSolicitações de amizade pendentes:');
+        solicitacoes.forEach(function (solicitante) {
+            console.log("".concat(solicitante.apelido, " te enviou uma solicita\u00E7\u00E3o de amizade"));
         });
     };
     return Menu;

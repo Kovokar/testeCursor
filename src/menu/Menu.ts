@@ -98,7 +98,8 @@ export class Menu {
         console.log('1. Enviar solicitação');
         console.log('2. Aceitar solicitação');
         console.log('3. Recusar solicitação');
-        console.log('4. Voltar');
+        console.log('4. Listar solicitações');
+        console.log('5. Voltar');
 
         const opcao = this.pergunta('Escolha uma opção: ');
 
@@ -113,6 +114,9 @@ export class Menu {
                 await this.recusarSolicitacao();
                 break;
             case '4':
+                this.listarSolicitacoes();
+                break;
+            case '5':
                 return;
             default:
                 console.log('Opção inválida!');
@@ -206,11 +210,31 @@ export class Menu {
         perfis.forEach(perfil => {
             const publicacoes = perfil.listarPostagens();
             publicacoes.forEach(pub => {
-                console.log(`\nID: ${pub.id}`);
-                console.log(`Autor: ${pub.perfil.apelido}`);
-                console.log(`Conteúdo: ${pub.conteudo}`);
+                console.log(`\n${perfil.apelido} publicou: ${pub.conteudo}`);
                 console.log(`Data: ${pub.dataHora.toLocaleString()}`);
+                
+                if (pub instanceof PublicacaoAvancada) {
+                    const interacoes = pub.listarInteracoes();
+                    if (interacoes.length > 0) {
+                        console.log('Interações:', interacoes.length);
+                    }
+                }
+                console.log('-------------------');
             });
+        });
+    }
+
+    private listarSolicitacoes(): void {
+        const solicitacoes = this.redeSocial.listarSolicitacoesPendentes(this.perfilLogado.id);
+        
+        if (solicitacoes.length === 0) {
+            console.log('\nNenhuma solicitação de amizade pendente.');
+            return;
+        }
+
+        console.log('\nSolicitações de amizade pendentes:');
+        solicitacoes.forEach(solicitante => {
+            console.log(`${solicitante.apelido} te enviou uma solicitação de amizade`);
         });
     }
 
