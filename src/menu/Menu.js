@@ -37,15 +37,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.Menu = void 0;
-var readline = require("readline");
 var Publicacao_1 = require("../models/Publicacao");
 var PublicacaoAvancada_1 = require("../models/PublicacaoAvancada");
+var ReadlineService_1 = require("../utils/ReadlineService");
 var Menu = /** @class */ (function () {
     function Menu(redeSocial, perfilLogado) {
-        this.rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
         this.redeSocial = redeSocial;
         this.perfilLogado = perfilLogado;
     }
@@ -55,51 +51,47 @@ var Menu = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!true) return [3 /*break*/, 14];
+                        if (!true) return [3 /*break*/, 13];
                         console.log('\n=== Menu Principal ===');
                         console.log('1. Gerenciar Perfis');
                         console.log('2. Gerenciar Publicações');
                         console.log('3. Gerenciar Amizades');
                         console.log('4. Sair');
-                        return [4 /*yield*/, this.pergunta('Escolha uma opção: ')];
+                        opcao = this.pergunta('Escolha uma opção: ');
+                        _b.label = 1;
                     case 1:
-                        opcao = _b.sent();
-                        _b.label = 2;
-                    case 2:
-                        _b.trys.push([2, 12, , 13]);
+                        _b.trys.push([1, 11, , 12]);
                         _a = opcao;
                         switch (_a) {
-                            case '1': return [3 /*break*/, 3];
-                            case '2': return [3 /*break*/, 5];
-                            case '3': return [3 /*break*/, 7];
-                            case '4': return [3 /*break*/, 9];
+                            case '1': return [3 /*break*/, 2];
+                            case '2': return [3 /*break*/, 4];
+                            case '3': return [3 /*break*/, 6];
+                            case '4': return [3 /*break*/, 8];
                         }
+                        return [3 /*break*/, 9];
+                    case 2: return [4 /*yield*/, this.menuPerfis()];
+                    case 3:
+                        _b.sent();
                         return [3 /*break*/, 10];
-                    case 3: return [4 /*yield*/, this.menuPerfis()];
-                    case 4:
+                    case 4: return [4 /*yield*/, this.menuPublicacoes()];
+                    case 5:
                         _b.sent();
-                        return [3 /*break*/, 11];
-                    case 5: return [4 /*yield*/, this.menuPublicacoes()];
-                    case 6:
+                        return [3 /*break*/, 10];
+                    case 6: return [4 /*yield*/, this.menuAmizades()];
+                    case 7:
                         _b.sent();
-                        return [3 /*break*/, 11];
-                    case 7: return [4 /*yield*/, this.menuAmizades()];
-                    case 8:
-                        _b.sent();
-                        return [3 /*break*/, 11];
+                        return [3 /*break*/, 10];
+                    case 8: return [2 /*return*/];
                     case 9:
-                        this.rl.close();
-                        return [2 /*return*/];
-                    case 10:
                         console.log('Opção inválida!');
-                        _b.label = 11;
-                    case 11: return [3 /*break*/, 13];
-                    case 12:
+                        _b.label = 10;
+                    case 10: return [3 /*break*/, 12];
+                    case 11:
                         error_1 = _b.sent();
                         console.error('Erro:', error_1.message);
-                        return [3 /*break*/, 13];
-                    case 13: return [3 /*break*/, 0];
-                    case 14: return [2 /*return*/];
+                        return [3 /*break*/, 12];
+                    case 12: return [3 /*break*/, 0];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -114,28 +106,26 @@ var Menu = /** @class */ (function () {
                         console.log('1. Listar perfis');
                         console.log('2. Buscar perfil');
                         console.log('3. Voltar');
-                        return [4 /*yield*/, this.pergunta('Escolha uma opção: ')];
-                    case 1:
-                        opcao = _b.sent();
+                        opcao = this.pergunta('Escolha uma opção: ');
                         _a = opcao;
                         switch (_a) {
-                            case '1': return [3 /*break*/, 2];
-                            case '2': return [3 /*break*/, 3];
-                            case '3': return [3 /*break*/, 5];
+                            case '1': return [3 /*break*/, 1];
+                            case '2': return [3 /*break*/, 2];
+                            case '3': return [3 /*break*/, 4];
                         }
-                        return [3 /*break*/, 6];
-                    case 2:
+                        return [3 /*break*/, 5];
+                    case 1:
                         this.listarPerfis();
-                        return [3 /*break*/, 7];
-                    case 3: return [4 /*yield*/, this.buscarPerfil()];
-                    case 4:
+                        return [3 /*break*/, 6];
+                    case 2: return [4 /*yield*/, this.buscarPerfil()];
+                    case 3:
                         _b.sent();
-                        return [3 /*break*/, 7];
-                    case 5: return [2 /*return*/];
-                    case 6:
+                        return [3 /*break*/, 6];
+                    case 4: return [2 /*return*/];
+                    case 5:
                         console.log('Opção inválida!');
-                        _b.label = 7;
-                    case 7: return [2 /*return*/];
+                        _b.label = 6;
+                    case 6: return [2 /*return*/];
                 }
             });
         });
@@ -151,33 +141,31 @@ var Menu = /** @class */ (function () {
                         console.log('2. Listar publicações');
                         console.log('3. Criar publicação avançada');
                         console.log('4. Voltar');
-                        return [4 /*yield*/, this.pergunta('Escolha uma opção: ')];
-                    case 1:
-                        opcao = _b.sent();
+                        opcao = this.pergunta('Escolha uma opção: ');
                         _a = opcao;
                         switch (_a) {
-                            case '1': return [3 /*break*/, 2];
-                            case '2': return [3 /*break*/, 4];
-                            case '3': return [3 /*break*/, 5];
-                            case '4': return [3 /*break*/, 7];
+                            case '1': return [3 /*break*/, 1];
+                            case '2': return [3 /*break*/, 3];
+                            case '3': return [3 /*break*/, 4];
+                            case '4': return [3 /*break*/, 6];
                         }
+                        return [3 /*break*/, 7];
+                    case 1: return [4 /*yield*/, this.criarPublicacao()];
+                    case 2:
+                        _b.sent();
                         return [3 /*break*/, 8];
-                    case 2: return [4 /*yield*/, this.criarPublicacao()];
                     case 3:
-                        _b.sent();
-                        return [3 /*break*/, 9];
-                    case 4:
                         this.listarPublicacoes();
-                        return [3 /*break*/, 9];
-                    case 5: return [4 /*yield*/, this.criarPublicacaoAvancada()];
-                    case 6:
+                        return [3 /*break*/, 8];
+                    case 4: return [4 /*yield*/, this.criarPublicacaoAvancada()];
+                    case 5:
                         _b.sent();
-                        return [3 /*break*/, 9];
-                    case 7: return [2 /*return*/];
-                    case 8:
+                        return [3 /*break*/, 8];
+                    case 6: return [2 /*return*/];
+                    case 7:
                         console.log('Opção inválida!');
-                        _b.label = 9;
-                    case 9: return [2 /*return*/];
+                        _b.label = 8;
+                    case 8: return [2 /*return*/];
                 }
             });
         });
@@ -192,29 +180,32 @@ var Menu = /** @class */ (function () {
                         console.log('1. Enviar solicitação');
                         console.log('2. Aceitar solicitação');
                         console.log('3. Recusar solicitação');
-                        console.log('4. Voltar');
-                        return [4 /*yield*/, this.pergunta('Escolha uma opção: ')];
-                    case 1:
-                        opcao = _b.sent();
+                        console.log('4. Listar solicitações');
+                        console.log('5. Voltar');
+                        opcao = this.pergunta('Escolha uma opção: ');
                         _a = opcao;
                         switch (_a) {
-                            case '1': return [3 /*break*/, 2];
-                            case '2': return [3 /*break*/, 4];
-                            case '3': return [3 /*break*/, 6];
-                            case '4': return [3 /*break*/, 8];
+                            case '1': return [3 /*break*/, 1];
+                            case '2': return [3 /*break*/, 3];
+                            case '3': return [3 /*break*/, 5];
+                            case '4': return [3 /*break*/, 7];
+                            case '5': return [3 /*break*/, 8];
                         }
                         return [3 /*break*/, 9];
-                    case 2: return [4 /*yield*/, this.enviarSolicitacao()];
-                    case 3:
+                    case 1: return [4 /*yield*/, this.enviarSolicitacao()];
+                    case 2:
                         _b.sent();
                         return [3 /*break*/, 10];
-                    case 4: return [4 /*yield*/, this.aceitarSolicitacao()];
-                    case 5:
+                    case 3: return [4 /*yield*/, this.aceitarSolicitacao()];
+                    case 4:
                         _b.sent();
                         return [3 /*break*/, 10];
-                    case 6: return [4 /*yield*/, this.recusarSolicitacao()];
+                    case 5: return [4 /*yield*/, this.recusarSolicitacao()];
+                    case 6:
+                        _b.sent();
+                        return [3 /*break*/, 10];
                     case 7:
-                        _b.sent();
+                        this.listarSolicitacoes();
                         return [3 /*break*/, 10];
                     case 8: return [2 /*return*/];
                     case 9:
@@ -226,12 +217,7 @@ var Menu = /** @class */ (function () {
         });
     };
     Menu.prototype.pergunta = function (pergunta) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            _this.rl.question(pergunta, function (resposta) {
-                resolve(resposta);
-            });
-        });
+        return ReadlineService_1.ReadlineService.pergunta(pergunta);
     };
     Menu.prototype.listarPerfis = function () {
         var perfis = this.redeSocial.listarPerfis();
@@ -242,65 +228,47 @@ var Menu = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var identificador, perfil;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite ID, email ou apelido: ')];
-                    case 1:
-                        identificador = _a.sent();
-                        perfil = this.redeSocial.buscarPerfil(identificador);
-                        if (perfil) {
-                            console.log("\nPerfil encontrado:\nID: ".concat(perfil.id, "\nApelido: ").concat(perfil.apelido, "\nEmail: ").concat(perfil.email));
-                        }
-                        else {
-                            console.log('Perfil não encontrado.');
-                        }
-                        return [2 /*return*/];
+                identificador = this.pergunta('Digite o ID, email ou apelido do perfil: ');
+                perfil = this.redeSocial.buscarPerfil(identificador);
+                if (perfil) {
+                    console.log("\nPerfil encontrado:\nID: ".concat(perfil.id, "\nApelido: ").concat(perfil.apelido, "\nEmail: ").concat(perfil.email));
                 }
+                else {
+                    console.log('Perfil não encontrado.');
+                }
+                return [2 /*return*/];
             });
         });
     };
     Menu.prototype.enviarSolicitacao = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var idSolicitante, idSolicitado;
+            var idSolicitado;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite seu ID: ')];
-                    case 1:
-                        idSolicitante = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Digite o ID do perfil que deseja adicionar: ')];
-                    case 2:
-                        idSolicitado = _a.sent();
-                        try {
-                            this.redeSocial.enviarSolicitacaoAmizade(idSolicitante, idSolicitado);
-                            console.log('Solicitação enviada com sucesso!');
-                        }
-                        catch (error) {
-                            console.error('Erro ao enviar solicitação:', error.message);
-                        }
-                        return [2 /*return*/];
+                idSolicitado = this.pergunta('Digite o ID, email ou apelido do perfil que deseja adicionar: ');
+                try {
+                    this.redeSocial.enviarSolicitacaoAmizade(this.perfilLogado.id, idSolicitado);
+                    console.log('Solicitação enviada com sucesso!');
                 }
+                catch (error) {
+                    console.error('Erro ao enviar solicitação:', error.message);
+                }
+                return [2 /*return*/];
             });
         });
     };
     Menu.prototype.aceitarSolicitacao = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var idSolicitante, idSolicitado;
+            var idSolicitante;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite o ID de quem enviou a solicitação: ')];
-                    case 1:
-                        idSolicitante = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Digite seu ID: ')];
-                    case 2:
-                        idSolicitado = _a.sent();
-                        try {
-                            this.redeSocial.aceitarSolicitacao(idSolicitante, idSolicitado);
-                            console.log('Solicitação aceita com sucesso!');
-                        }
-                        catch (error) {
-                            console.error('Erro ao aceitar solicitação:', error.message);
-                        }
-                        return [2 /*return*/];
+                idSolicitante = this.pergunta('Digite o ID, email ou apelido de quem enviou a solicitação: ');
+                try {
+                    this.redeSocial.aceitarSolicitacao(idSolicitante, this.perfilLogado.id);
+                    console.log('Solicitação aceita com sucesso!');
                 }
+                catch (error) {
+                    console.error('Erro ao aceitar solicitação:', error.message);
+                }
+                return [2 /*return*/];
             });
         });
     };
@@ -308,77 +276,51 @@ var Menu = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var idSolicitante;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite o ID de quem enviou a solicitação: ')];
-                    case 1:
-                        idSolicitante = _a.sent();
-                        try {
-                            this.redeSocial.recusarSolicitacao(idSolicitante);
-                            console.log('Solicitação recusada com sucesso!');
-                        }
-                        catch (error) {
-                            console.error('Erro ao recusar solicitação:', error.message);
-                        }
-                        return [2 /*return*/];
+                idSolicitante = this.pergunta('Digite o ID de quem enviou a solicitação: ');
+                try {
+                    this.redeSocial.recusarSolicitacao(idSolicitante);
+                    console.log('Solicitação recusada com sucesso!');
                 }
+                catch (error) {
+                    console.error('Erro ao recusar solicitação:', error.message);
+                }
+                return [2 /*return*/];
             });
         });
     };
     Menu.prototype.criarPublicacao = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var idPerfil, conteudo, id, perfil, publicacao;
+            var conteudo, id, publicacao;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite seu ID: ')];
-                    case 1:
-                        idPerfil = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Digite o conteúdo da publicação: ')];
-                    case 2:
-                        conteudo = _a.sent();
-                        id = Date.now().toString();
-                        try {
-                            perfil = this.redeSocial.buscarPerfil(idPerfil);
-                            if (!perfil) {
-                                throw new Error('Perfil não encontrado');
-                            }
-                            publicacao = new Publicacao_1.Publicacao(id, conteudo, perfil);
-                            perfil.adicionarPublicacao(publicacao);
-                            console.log('Publicação criada com sucesso!');
-                        }
-                        catch (error) {
-                            console.error('Erro ao criar publicação:', error.message);
-                        }
-                        return [2 /*return*/];
+                conteudo = this.pergunta('Digite o conteúdo da publicação: ');
+                id = Date.now().toString();
+                try {
+                    publicacao = new Publicacao_1.Publicacao(id, conteudo, this.perfilLogado);
+                    this.perfilLogado.adicionarPublicacao(publicacao);
+                    console.log('Publicação criada com sucesso!');
                 }
+                catch (error) {
+                    console.error('Erro ao criar publicação:', error.message);
+                }
+                return [2 /*return*/];
             });
         });
     };
     Menu.prototype.criarPublicacaoAvancada = function () {
         return __awaiter(this, void 0, void 0, function () {
-            var idPerfil, conteudo, id, perfil, publicacao;
+            var conteudo, id, publicacao;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite seu ID: ')];
-                    case 1:
-                        idPerfil = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Digite o conteúdo da publicação: ')];
-                    case 2:
-                        conteudo = _a.sent();
-                        id = Date.now().toString();
-                        try {
-                            perfil = this.redeSocial.buscarPerfil(idPerfil);
-                            if (!perfil) {
-                                throw new Error('Perfil não encontrado');
-                            }
-                            publicacao = new PublicacaoAvancada_1.PublicacaoAvancada(id, conteudo, perfil);
-                            perfil.adicionarPublicacao(publicacao);
-                            console.log('Publicação avançada criada com sucesso!');
-                        }
-                        catch (error) {
-                            console.error('Erro ao criar publicação avançada:', error.message);
-                        }
-                        return [2 /*return*/];
+                conteudo = this.pergunta('Digite o conteúdo da publicação: ');
+                id = Date.now().toString();
+                try {
+                    publicacao = new PublicacaoAvancada_1.PublicacaoAvancada(id, conteudo, this.perfilLogado);
+                    this.perfilLogado.adicionarPublicacao(publicacao);
+                    console.log('Publicação avançada criada com sucesso!');
                 }
+                catch (error) {
+                    console.error('Erro ao criar publicação avançada:', error.message);
+                }
+                return [2 /*return*/];
             });
         });
     };
@@ -388,11 +330,27 @@ var Menu = /** @class */ (function () {
         perfis.forEach(function (perfil) {
             var publicacoes = perfil.listarPostagens();
             publicacoes.forEach(function (pub) {
-                console.log("\nID: ".concat(pub.id));
-                console.log("Autor: ".concat(pub.perfil.apelido));
-                console.log("Conte\u00FAdo: ".concat(pub.conteudo));
+                console.log("\n".concat(perfil.apelido, " publicou: ").concat(pub.conteudo));
                 console.log("Data: ".concat(pub.dataHora.toLocaleString()));
+                if (pub instanceof PublicacaoAvancada_1.PublicacaoAvancada) {
+                    var interacoes = pub.listarInteracoes();
+                    if (interacoes.length > 0) {
+                        console.log('Interações:', interacoes.length);
+                    }
+                }
+                console.log('-------------------');
             });
+        });
+    };
+    Menu.prototype.listarSolicitacoes = function () {
+        var solicitacoes = this.redeSocial.listarSolicitacoesPendentes(this.perfilLogado.id);
+        if (solicitacoes.length === 0) {
+            console.log('\nNenhuma solicitação de amizade pendente.');
+            return;
+        }
+        console.log('\nSolicitações de amizade pendentes:');
+        solicitacoes.forEach(function (solicitante) {
+            console.log("".concat(solicitante.apelido, " te enviou uma solicita\u00E7\u00E3o de amizade"));
         });
     };
     return Menu;

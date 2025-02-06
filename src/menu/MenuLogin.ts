@@ -1,17 +1,12 @@
-import * as readline from 'readline';
 import { RedeSocial } from '../models/RedeSocial';
 import { Menu } from './Menu';
 import { Perfil } from '../models/Perfil';
+import { ReadlineService } from '../utils/ReadlineService';
 
 export class MenuLogin {
-    private rl: readline.Interface;
     private redeSocial: RedeSocial;
 
     constructor() {
-        this.rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
         this.redeSocial = new RedeSocial();
     }
 
@@ -23,7 +18,7 @@ export class MenuLogin {
             console.log('3. Recuperar Senha');
             console.log('4. Sair');
 
-            const opcao = await this.pergunta('Escolha uma opção: ');
+            const opcao = this.pergunta('Escolha uma opção: ');
 
             try {
                 switch (opcao) {
@@ -38,7 +33,7 @@ export class MenuLogin {
                         break;
                     case '4':
                         console.log('Até logo!');
-                        this.rl.close();
+                        ReadlineService.close();
                         return;
                     default:
                         console.log('Opção inválida!');
@@ -50,8 +45,8 @@ export class MenuLogin {
     }
 
     private async fazerLogin(): Promise<void> {
-        const email = await this.pergunta('Email: ');
-        const senha = await this.pergunta('Senha: ');
+        const email = this.pergunta('Email: ');
+        const senha = this.pergunta('Senha: ');
 
         const perfil = this.redeSocial.listarPerfis().find(p => p.autenticar(email, senha));
 
@@ -66,10 +61,10 @@ export class MenuLogin {
 
     private async criarConta(): Promise<void> {
         const id = Date.now().toString();
-        const apelido = await this.pergunta('Nome de usuário: ');
-        const email = await this.pergunta('Email: ');
-        const senha = await this.pergunta('Senha: ');
-        const foto = await this.pergunta('Foto (emoji): ');
+        const apelido = this.pergunta('Nome de usuário: ');
+        const email = this.pergunta('Email: ');
+        const senha = this.pergunta('Senha: ');
+        const foto = this.pergunta('Foto (emoji): ');
 
         try {
             const perfil = new Perfil(id, apelido, foto, email, senha);
@@ -82,23 +77,19 @@ export class MenuLogin {
     }
 
     private async recuperarSenha(): Promise<void> {
-        const email = await this.pergunta('Digite seu email: ');
+        const email = this.pergunta('Digite seu email: ');
         console.log('Um código de recuperação foi enviado para seu email.');
         
-        const codigo = await this.pergunta('Digite o código recebido: ');
+        const codigo = this.pergunta('Digite o código recebido: ');
         if (codigo === '123456') { // Código simulado
-            const novaSenha = await this.pergunta('Digite sua nova senha: ');
+            const novaSenha = this.pergunta('Digite sua nova senha: ');
             console.log('Senha alterada com sucesso!');
         } else {
             console.log('Código inválido!');
         }
     }
 
-    private pergunta(pergunta: string): Promise<string> {
-        return new Promise((resolve) => {
-            this.rl.question(pergunta, (resposta) => {
-                resolve(resposta);
-            });
-        });
+    private pergunta(pergunta: string): string {
+        return ReadlineService.pergunta(pergunta);
     }
 } 

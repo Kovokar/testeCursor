@@ -130,4 +130,21 @@ export class RedeSocial {
         this._solicitacoesPendentes.delete(idSolicitante);
         this.salvarDados();
     }
+
+    public listarSolicitacoesPendentes(idSolicitado: string): Perfil[] {
+        const solicitacoes: Perfil[] = [];
+        
+        this._solicitacoesPendentes.forEach((idDestino, idOrigem) => {
+            console.log(idDestino, idOrigem);
+            console.log(idSolicitado);
+            if (idDestino === idSolicitado) {
+                const solicitante = this.buscarPerfil(idOrigem);
+                if (solicitante) {
+                    solicitacoes.push(solicitante);
+                }
+            }
+        });
+        
+        return solicitacoes;
+    }
 } 

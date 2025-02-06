@@ -1,20 +1,14 @@
-import * as readline from 'readline';
 import { RedeSocial } from '../models/RedeSocial';
 import { Perfil } from '../models/Perfil';
 import { Publicacao } from '../models/Publicacao';
 import { PublicacaoAvancada } from '../models/PublicacaoAvancada';
-
+import { ReadlineService } from '../utils/ReadlineService';
 
 export class Menu {
-    private rl: readline.Interface;
     private redeSocial: RedeSocial;
     private perfilLogado: Perfil;
 
     constructor(redeSocial: RedeSocial, perfilLogado: Perfil) {
-        this.rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
         this.redeSocial = redeSocial;
         this.perfilLogado = perfilLogado;
     }
@@ -27,7 +21,7 @@ export class Menu {
             console.log('3. Gerenciar Amizades');
             console.log('4. Sair');
 
-            const opcao = await this.pergunta('Escolha uma opção: ');
+            const opcao = this.pergunta('Escolha uma opção: ');
 
             try {
                 switch (opcao) {
@@ -41,7 +35,6 @@ export class Menu {
                         await this.menuAmizades();
                         break;
                     case '4':
-                        this.rl.close();
                         return;
                     default:
                         console.log('Opção inválida!');
@@ -58,7 +51,7 @@ export class Menu {
         console.log('2. Buscar perfil');
         console.log('3. Voltar');
 
-        const opcao = await this.pergunta('Escolha uma opção: ');
+        const opcao = this.pergunta('Escolha uma opção: ');
 
         switch (opcao) {
             case '1':
@@ -81,7 +74,7 @@ export class Menu {
         console.log('3. Criar publicação avançada');
         console.log('4. Voltar');
 
-        const opcao = await this.pergunta('Escolha uma opção: ');
+        const opcao = this.pergunta('Escolha uma opção: ');
 
         switch (opcao) {
             case '1':
@@ -105,9 +98,10 @@ export class Menu {
         console.log('1. Enviar solicitação');
         console.log('2. Aceitar solicitação');
         console.log('3. Recusar solicitação');
-        console.log('4. Voltar');
+        console.log('4. Listar solicitações');
+        console.log('5. Voltar');
 
-        const opcao = await this.pergunta('Escolha uma opção: ');
+        const opcao = this.pergunta('Escolha uma opção: ');
 
         switch (opcao) {
             case '1':
@@ -120,18 +114,17 @@ export class Menu {
                 await this.recusarSolicitacao();
                 break;
             case '4':
+                this.listarSolicitacoes();
+                break;
+            case '5':
                 return;
             default:
                 console.log('Opção inválida!');
         }
     }
 
-    private pergunta(pergunta: string): Promise<string> {
-        return new Promise((resolve) => {
-            this.rl.question(pergunta, (resposta) => {
-                resolve(resposta);
-            });
-        });
+    private pergunta(pergunta: string): string {
+        return ReadlineService.pergunta(pergunta);
     }
 
     private listarPerfis(): void {
@@ -141,7 +134,7 @@ export class Menu {
     }
 
     private async buscarPerfil(): Promise<void> {
-        const identificador = await this.pergunta('Digite ID, email ou apelido: ');
+        const identificador = this.pergunta('Digite o ID, email ou apelido do perfil: ');
         const perfil = this.redeSocial.buscarPerfil(identificador);
         
         if (perfil) {
@@ -152,11 +145,10 @@ export class Menu {
     }
 
     private async enviarSolicitacao(): Promise<void> {
-        const idSolicitante = await this.pergunta('Digite seu ID: ');
-        const idSolicitado = await this.pergunta('Digite o ID do perfil que deseja adicionar: ');
+        const idSolicitado = this.pergunta('Digite o ID, email ou apelido do perfil que deseja adicionar: ');
 
         try {
-            this.redeSocial.enviarSolicitacaoAmizade(idSolicitante, idSolicitado);
+            this.redeSocial.enviarSolicitacaoAmizade(this.perfilLogado.id, idSolicitado);
             console.log('Solicitação enviada com sucesso!');
         } catch (error: any) {
             console.error('Erro ao enviar solicitação:', error.message);
@@ -164,11 +156,10 @@ export class Menu {
     }
 
     private async aceitarSolicitacao(): Promise<void> {
-        const idSolicitante = await this.pergunta('Digite o ID de quem enviou a solicitação: ');
-        const idSolicitado = await this.pergunta('Digite seu ID: ');
+        const idSolicitante = this.pergunta('Digite o ID, email ou apelido de quem enviou a solicitação: ');
 
         try {
-            this.redeSocial.aceitarSolicitacao(idSolicitante, idSolicitado);
+            this.redeSocial.aceitarSolicitacao(idSolicitante, this.perfilLogado.id);
             console.log('Solicitação aceita com sucesso!');
         } catch (error: any) {
             console.error('Erro ao aceitar solicitação:', error.message);
@@ -176,7 +167,7 @@ export class Menu {
     }
 
     private async recusarSolicitacao(): Promise<void> {
-        const idSolicitante = await this.pergunta('Digite o ID de quem enviou a solicitação: ');
+        const idSolicitante = this.pergunta('Digite o ID de quem enviou a solicitação: ');
 
         try {
             this.redeSocial.recusarSolicitacao(idSolicitante);
@@ -187,18 +178,12 @@ export class Menu {
     }
 
     private async criarPublicacao(): Promise<void> {
-        const idPerfil = await this.pergunta('Digite seu ID: ');
-        const conteudo = await this.pergunta('Digite o conteúdo da publicação: ');
+        const conteudo = this.pergunta('Digite o conteúdo da publicação: ');
         const id = Date.now().toString(); // ID único baseado no timestamp
 
         try {
-            const perfil = this.redeSocial.buscarPerfil(idPerfil);
-            if (!perfil) {
-                throw new Error('Perfil não encontrado');
-            }
-
-            const publicacao = new Publicacao(id, conteudo, perfil);
-            perfil.adicionarPublicacao(publicacao);
+            const publicacao = new Publicacao(id, conteudo, this.perfilLogado);
+            this.perfilLogado.adicionarPublicacao(publicacao);
             console.log('Publicação criada com sucesso!');
         } catch (error: any) {
             console.error('Erro ao criar publicação:', error.message);
@@ -206,18 +191,12 @@ export class Menu {
     }
 
     private async criarPublicacaoAvancada(): Promise<void> {
-        const idPerfil = await this.pergunta('Digite seu ID: ');
-        const conteudo = await this.pergunta('Digite o conteúdo da publicação: ');
+        const conteudo = this.pergunta('Digite o conteúdo da publicação: ');
         const id = Date.now().toString();
 
         try {
-            const perfil = this.redeSocial.buscarPerfil(idPerfil);
-            if (!perfil) {
-                throw new Error('Perfil não encontrado');
-            }
-
-            const publicacao = new PublicacaoAvancada(id, conteudo, perfil);
-            perfil.adicionarPublicacao(publicacao);
+            const publicacao = new PublicacaoAvancada(id, conteudo, this.perfilLogado);
+            this.perfilLogado.adicionarPublicacao(publicacao);
             console.log('Publicação avançada criada com sucesso!');
         } catch (error: any) {
             console.error('Erro ao criar publicação avançada:', error.message);
@@ -231,11 +210,31 @@ export class Menu {
         perfis.forEach(perfil => {
             const publicacoes = perfil.listarPostagens();
             publicacoes.forEach(pub => {
-                console.log(`\nID: ${pub.id}`);
-                console.log(`Autor: ${pub.perfil.apelido}`);
-                console.log(`Conteúdo: ${pub.conteudo}`);
+                console.log(`\n${perfil.apelido} publicou: ${pub.conteudo}`);
                 console.log(`Data: ${pub.dataHora.toLocaleString()}`);
+                
+                if (pub instanceof PublicacaoAvancada) {
+                    const interacoes = pub.listarInteracoes();
+                    if (interacoes.length > 0) {
+                        console.log('Interações:', interacoes.length);
+                    }
+                }
+                console.log('-------------------');
             });
+        });
+    }
+
+    private listarSolicitacoes(): void {
+        const solicitacoes = this.redeSocial.listarSolicitacoesPendentes(this.perfilLogado.id);
+        
+        if (solicitacoes.length === 0) {
+            console.log('\nNenhuma solicitação de amizade pendente.');
+            return;
+        }
+
+        console.log('\nSolicitações de amizade pendentes:');
+        solicitacoes.forEach(solicitante => {
+            console.log(`${solicitante.apelido} te enviou uma solicitação de amizade`);
         });
     }
 

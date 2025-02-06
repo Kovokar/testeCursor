@@ -114,6 +114,21 @@ var RedeSocial = /** @class */ (function () {
         this._solicitacoesPendentes["delete"](idSolicitante);
         this.salvarDados();
     };
+    RedeSocial.prototype.listarSolicitacoesPendentes = function (idSolicitado) {
+        var _this = this;
+        var solicitacoes = [];
+        this._solicitacoesPendentes.forEach(function (idDestino, idOrigem) {
+            console.log(idDestino, idOrigem);
+            console.log(idSolicitado);
+            if (idDestino === idSolicitado) {
+                var solicitante = _this.buscarPerfil(idOrigem);
+                if (solicitante) {
+                    solicitacoes.push(solicitante);
+                }
+            }
+        });
+        return solicitacoes;
+    };
     return RedeSocial;
 }());
 exports.RedeSocial = RedeSocial;

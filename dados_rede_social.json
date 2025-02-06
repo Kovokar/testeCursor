@@ -7,9 +7,58 @@
       "email": "1",
       "senha": "1",
       "status": true,
-      "amigos": [],
+      "amigos": [
+        "1738810416537"
+      ],
       "postagens": []
+    },
+    {
+      "id": "1738810416537",
+      "apelido": "pedro",
+      "foto": "2",
+      "email": "2",
+      "senha": "2",
+      "status": true,
+      "amigos": [
+        "1738809825145"
+      ],
+      "postagens": [
+        {
+          "id": "1738810497894",
+          "conteudo": "Se fude fiz essaa merda por ia e ta bem melhor que o nosso",
+          "dataHora": "2025-02-06T03:14:24.410Z",
+          "perfilId": "1738810416537",
+          "tipo": "normal"
+        }
+      ]
+    },
+    {
+      "id": "1738811665615",
+      "apelido": "gisele",
+      "foto": "(3)",
+      "email": "3",
+      "senha": "3",
+      "status": true,
+      "amigos": [],
+      "postagens": [
+        {
+          "id": "1738811787037",
+          "conteudo": "ja vou voltar pro nosso(se bem q acho melhor usar esse kkkk)",
+          "dataHora": "2025-02-06T03:16:27.037Z",
+          "perfilId": "1738811665615",
+          "tipo": "normal"
+        }
+      ]
     }
   ],
-  "solicitacoesPendentes": []
+  "solicitacoesPendentes": [
+    [
+      "1738809825145",
+      "2"
+    ],
+    [
+      "1738811665615",
+      "1"
+    ]
+  ]
 }
