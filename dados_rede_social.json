@@ -9,6 +9,24 @@
       "status": true,
       "amigos": [],
       "postagens": []
+    },
+    {
+      "id": "1738810416537",
+      "apelido": "pedro",
+      "foto": "2",
+      "email": "2",
+      "senha": "2",
+      "status": true,
+      "amigos": [],
+      "postagens": [
+        {
+          "id": "1738810497894",
+          "conteudo": "Se fude fiz essaa merda por ia e ta bem melhor que o nosso",
+          "dataHora": "2025-02-06T02:54:57.895Z",
+          "perfilId": "1738810416537",
+          "tipo": "normal"
+        }
+      ]
     }
   ],
   "solicitacoesPendentes": []

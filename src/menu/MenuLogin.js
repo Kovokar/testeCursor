@@ -37,16 +37,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 exports.__esModule = true;
 exports.MenuLogin = void 0;
-var readline = require("readline");
 var RedeSocial_1 = require("../models/RedeSocial");
 var Menu_1 = require("./Menu");
 var Perfil_1 = require("../models/Perfil");
+var ReadlineService_1 = require("../utils/ReadlineService");
 var MenuLogin = /** @class */ (function () {
     function MenuLogin() {
-        this.rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
-        });
         this.redeSocial = new RedeSocial_1.RedeSocial();
     }
     MenuLogin.prototype.iniciar = function () {
@@ -55,52 +51,50 @@ var MenuLogin = /** @class */ (function () {
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        if (!true) return [3 /*break*/, 14];
+                        if (!true) return [3 /*break*/, 13];
                         console.log('\n=== Bem-vindo à Rede Social ===');
                         console.log('1. Login');
                         console.log('2. Criar Conta');
                         console.log('3. Recuperar Senha');
                         console.log('4. Sair');
-                        return [4 /*yield*/, this.pergunta('Escolha uma opção: ')];
+                        opcao = this.pergunta('Escolha uma opção: ');
+                        _b.label = 1;
                     case 1:
-                        opcao = _b.sent();
-                        _b.label = 2;
-                    case 2:
-                        _b.trys.push([2, 12, , 13]);
+                        _b.trys.push([1, 11, , 12]);
                         _a = opcao;
                         switch (_a) {
-                            case '1': return [3 /*break*/, 3];
-                            case '2': return [3 /*break*/, 5];
-                            case '3': return [3 /*break*/, 7];
-                            case '4': return [3 /*break*/, 9];
+                            case '1': return [3 /*break*/, 2];
+                            case '2': return [3 /*break*/, 4];
+                            case '3': return [3 /*break*/, 6];
+                            case '4': return [3 /*break*/, 8];
                         }
+                        return [3 /*break*/, 9];
+                    case 2: return [4 /*yield*/, this.fazerLogin()];
+                    case 3:
+                        _b.sent();
                         return [3 /*break*/, 10];
-                    case 3: return [4 /*yield*/, this.fazerLogin()];
-                    case 4:
+                    case 4: return [4 /*yield*/, this.criarConta()];
+                    case 5:
                         _b.sent();
-                        return [3 /*break*/, 11];
-                    case 5: return [4 /*yield*/, this.criarConta()];
-                    case 6:
+                        return [3 /*break*/, 10];
+                    case 6: return [4 /*yield*/, this.recuperarSenha()];
+                    case 7:
                         _b.sent();
-                        return [3 /*break*/, 11];
-                    case 7: return [4 /*yield*/, this.recuperarSenha()];
+                        return [3 /*break*/, 10];
                     case 8:
-                        _b.sent();
-                        return [3 /*break*/, 11];
-                    case 9:
                         console.log('Até logo!');
-                        this.rl.close();
+                        ReadlineService_1.ReadlineService.close();
                         return [2 /*return*/];
-                    case 10:
+                    case 9:
                         console.log('Opção inválida!');
-                        _b.label = 11;
-                    case 11: return [3 /*break*/, 13];
-                    case 12:
+                        _b.label = 10;
+                    case 10: return [3 /*break*/, 12];
+                    case 11:
                         error_1 = _b.sent();
                         console.error('Erro:', error_1.message);
-                        return [3 /*break*/, 13];
-                    case 13: return [3 /*break*/, 0];
-                    case 14: return [2 /*return*/];
+                        return [3 /*break*/, 12];
+                    case 12: return [3 /*break*/, 0];
+                    case 13: return [2 /*return*/];
                 }
             });
         });
@@ -110,24 +104,21 @@ var MenuLogin = /** @class */ (function () {
             var email, senha, perfil, menu;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Email: ')];
-                    case 1:
-                        email = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Senha: ')];
-                    case 2:
-                        senha = _a.sent();
+                    case 0:
+                        email = this.pergunta('Email: ');
+                        senha = this.pergunta('Senha: ');
                         perfil = this.redeSocial.listarPerfis().find(function (p) { return p.autenticar(email, senha); });
-                        if (!perfil) return [3 /*break*/, 4];
+                        if (!perfil) return [3 /*break*/, 2];
                         console.log("\nBem-vindo(a) de volta, ".concat(perfil.apelido, "!"));
                         menu = new Menu_1.Menu(this.redeSocial, perfil);
                         return [4 /*yield*/, menu.iniciar()];
-                    case 3:
+                    case 1:
                         _a.sent();
-                        return [3 /*break*/, 5];
-                    case 4:
+                        return [3 /*break*/, 3];
+                    case 2:
                         console.log('Email ou senha incorretos!');
-                        _a.label = 5;
-                    case 5: return [2 /*return*/];
+                        _a.label = 3;
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -136,32 +127,21 @@ var MenuLogin = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var id, apelido, email, senha, foto, perfil;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0:
-                        id = Date.now().toString();
-                        return [4 /*yield*/, this.pergunta('Nome de usuário: ')];
-                    case 1:
-                        apelido = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Email: ')];
-                    case 2:
-                        email = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Senha: ')];
-                    case 3:
-                        senha = _a.sent();
-                        return [4 /*yield*/, this.pergunta('Foto (emoji): ')];
-                    case 4:
-                        foto = _a.sent();
-                        try {
-                            perfil = new Perfil_1.Perfil(id, apelido, foto, email, senha);
-                            perfil.setRedeSocial(this.redeSocial);
-                            this.redeSocial.adicionarPerfil(perfil);
-                            console.log('Conta criada com sucesso!');
-                        }
-                        catch (error) {
-                            console.error('Erro ao criar conta:', error.message);
-                        }
-                        return [2 /*return*/];
+                id = Date.now().toString();
+                apelido = this.pergunta('Nome de usuário: ');
+                email = this.pergunta('Email: ');
+                senha = this.pergunta('Senha: ');
+                foto = this.pergunta('Foto (emoji): ');
+                try {
+                    perfil = new Perfil_1.Perfil(id, apelido, foto, email, senha);
+                    perfil.setRedeSocial(this.redeSocial);
+                    this.redeSocial.adicionarPerfil(perfil);
+                    console.log('Conta criada com sucesso!');
                 }
+                catch (error) {
+                    console.error('Erro ao criar conta:', error.message);
+                }
+                return [2 /*return*/];
             });
         });
     };
@@ -169,35 +149,22 @@ var MenuLogin = /** @class */ (function () {
         return __awaiter(this, void 0, void 0, function () {
             var email, codigo, novaSenha;
             return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.pergunta('Digite seu email: ')];
-                    case 1:
-                        email = _a.sent();
-                        console.log('Um código de recuperação foi enviado para seu email.');
-                        return [4 /*yield*/, this.pergunta('Digite o código recebido: ')];
-                    case 2:
-                        codigo = _a.sent();
-                        if (!(codigo === '123456')) return [3 /*break*/, 4];
-                        return [4 /*yield*/, this.pergunta('Digite sua nova senha: ')];
-                    case 3:
-                        novaSenha = _a.sent();
-                        console.log('Senha alterada com sucesso!');
-                        return [3 /*break*/, 5];
-                    case 4:
-                        console.log('Código inválido!');
-                        _a.label = 5;
-                    case 5: return [2 /*return*/];
+                email = this.pergunta('Digite seu email: ');
+                console.log('Um código de recuperação foi enviado para seu email.');
+                codigo = this.pergunta('Digite o código recebido: ');
+                if (codigo === '123456') { // Código simulado
+                    novaSenha = this.pergunta('Digite sua nova senha: ');
+                    console.log('Senha alterada com sucesso!');
                 }
+                else {
+                    console.log('Código inválido!');
+                }
+                return [2 /*return*/];
             });
         });
     };
     MenuLogin.prototype.pergunta = function (pergunta) {
-        var _this = this;
-        return new Promise(function (resolve) {
-            _this.rl.question(pergunta, function (resposta) {
-                resolve(resposta);
-            });
-        });
+        return ReadlineService_1.ReadlineService.pergunta(pergunta);
     };
     return MenuLogin;
 }());
